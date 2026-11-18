@@ -23,7 +23,7 @@ class LocalStorageMock {
   }
 }
 
-describe("DocFlow 공식 홈페이지 및 고객 확보 기능 단위 테스트", () => {
+describe("세움노트 (SeumNote) 공식 홈페이지 및 고객 확보 기능 단위 테스트", () => {
   beforeAll(() => {
     global.localStorage = new LocalStorageMock() as any;
   });
@@ -79,7 +79,7 @@ describe("DocFlow 공식 홈페이지 및 고객 확보 기능 단위 테스트"
 
     expect(result.success).toBe(true);
     expect(result.submission).toBeDefined();
-    expect(result.submission?.id).toMatch(/^WF-/);
+    expect(result.submission?.id).toMatch(/^SN-/);
 
     const list = loadWaitlist();
     expect(list).toHaveLength(1);

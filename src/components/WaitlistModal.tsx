@@ -112,7 +112,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 14 Days Free Trial
               </span>
               <h3 className="text-2xl font-black text-[#0F172A] tracking-tight mt-2">
-                DocFlow 무료 체험 신청
+                세움노트 무료 체험 신청
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
                 인허가 보완 업무를 전산화하고 싶은 사무소 정보를 입력해 주세요.

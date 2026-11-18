@@ -21,7 +21,7 @@ export function Footer({ onOpenWaitlist }: FooterProps) {
             </span>
             <h3 className="text-2xl sm:text-4xl font-black tracking-tight leading-snug">
               인허가 보완의 번거로움, <br className="hidden sm:inline" />
-              오늘부터 DocFlow로 해결하세요
+              오늘부터 세움노트로 해결하세요
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 font-medium">
               신용카드 등록 없이 14일간 모든 기능을 무료로 체험하실 수 있습니다.
@@ -45,7 +45,7 @@ export function Footer({ onOpenWaitlist }: FooterProps) {
                 <FileCheck2 className="w-4 h-4 stroke-[2.5]" />
               </div>
               <span className="font-black text-xl tracking-tight text-[#0F172A]">
-                DocFlow
+                세움노트
               </span>
             </div>
             <p className="text-xs text-slate-500 max-w-sm leading-relaxed font-medium">
@@ -77,7 +77,7 @@ export function Footer({ onOpenWaitlist }: FooterProps) {
             <div className="space-y-2 text-xs font-medium text-slate-500">
               <p className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-slate-400" />
-                <span>support@docflow.kr</span>
+                <span>support@seumnote.kr</span>
               </p>
               <p>운영시간: 평일 09:30 ~ 18:30 (주말/공휴일 휴무)</p>
               <p className="text-[11px] text-slate-400">
@@ -89,7 +89,7 @@ export function Footer({ onOpenWaitlist }: FooterProps) {
 
         {/* 저작권 및 카피라이트 */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-400">
-          <p>© {new Date().getFullYear()} DocFlow. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} 세움노트 (SeumNote). All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-slate-600 cursor-pointer">이용약관</span>
             <span>&bull;</span>

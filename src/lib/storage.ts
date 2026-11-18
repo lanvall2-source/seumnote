@@ -1,10 +1,17 @@
 import type { WaitlistSubmission } from "@/types";
 
-const STORAGE_KEY = "docflow_waitlist_submissions_v1";
+const STORAGE_KEY = "seumnote_waitlist_submissions_v1";
+const LEGACY_STORAGE_KEY = "docflow_waitlist_submissions_v1";
 
 export function loadWaitlist(): WaitlistSubmission[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (raw) {
+        localStorage.setItem(STORAGE_KEY, raw);
+      }
+    }
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -44,7 +51,7 @@ export function saveWaitlistSubmission(
 
     const newSubmission: WaitlistSubmission = {
       ...data,
-      id: `WF-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      id: `SN-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       createdAt: new Date().toISOString(),
     };
 
@@ -78,7 +85,7 @@ export function exportWaitlistToCSV(submissions: WaitlistSubmission[]): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", `docflow_waitlist_${new Date().toISOString().slice(0, 10)}.csv`);
+  link.setAttribute("download", `seumnote_waitlist_${new Date().toISOString().slice(0, 10)}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

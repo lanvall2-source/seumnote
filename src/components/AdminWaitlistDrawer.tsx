@@ -24,8 +24,8 @@ export function AdminWaitlistDrawer({ isOpen, onClose }: AdminWaitlistDrawerProp
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // 관리자 마스터 비밀번호 확인 (데모용: docflow2026 또는 admin1234)
-    if (password === "docflow2026" || password === "admin1234") {
+    // 관리자 마스터 비밀번호 확인 (데모용: seumnote2026, docflow2026 또는 admin1234)
+    if (password === "seumnote2026" || password === "docflow2026" || password === "admin1234") {
       setIsAuthenticated(true);
       setAuthError(false);
       setSubmissions(loadWaitlist());
@@ -36,6 +36,7 @@ export function AdminWaitlistDrawer({ isOpen, onClose }: AdminWaitlistDrawerProp
 
   const handleClearAll = () => {
     if (confirm("정말로 모든 신청자 데이터를 삭제하시겠습니까?")) {
+      localStorage.removeItem("seumnote_waitlist_submissions_v1");
       localStorage.removeItem("docflow_waitlist_submissions_v1");
       setSubmissions([]);
     }

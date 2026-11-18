@@ -23,7 +23,7 @@ export function ProductDemo() {
   const selectedProject = DEMO_PROJECTS.find((p) => p.id === selectedProjectId) || DEMO_PROJECTS[0];
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`https://docflow.kr/submit/${selectedProject.id}`);
+    navigator.clipboard.writeText(`https://seumnote.kr/submit/${selectedProject.id}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

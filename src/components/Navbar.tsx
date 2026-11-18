@@ -28,9 +28,9 @@ export function Navbar({ onOpenWaitlist, onOpenAdmin }: NavbarProps) {
           </div>
           <div className="flex flex-col">
             <span className="font-black text-xl tracking-tight text-[#0F172A] flex items-center gap-1.5">
-              DocFlow
+              세움노트
               <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-100 text-[#2563EB]">
-                B2B SaaS
+                SeumNote
               </span>
             </span>
           </div>

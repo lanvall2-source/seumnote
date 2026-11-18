@@ -39,7 +39,7 @@ export function FeaturesSection() {
           </span>
           <h2 className="text-2xl sm:text-4xl font-black text-[#0F172A] tracking-tight mt-4 leading-snug">
             인허가 보완의 모든 단계, <br className="hidden sm:inline" />
-            DocFlow 하나로 끝냅니다
+            세움노트 하나로 끝냅니다
           </h2>
           <p className="mt-4 text-base sm:text-lg text-slate-600 font-medium leading-relaxed">
             건축사사무소 실무자의 실제 워크플로우를 그대로 담아 설계했습니다. <br className="hidden sm:inline" />

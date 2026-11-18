@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /submit/
 Disallow: /api/
 
-Sitemap: https://docflow-saas.vercel.app/sitemap.xml
+Sitemap: https://seumnote.vercel.app/sitemap.xml
