@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /submit/
+Disallow: /api/
+
+Sitemap: https://docflow-saas.vercel.app/sitemap.xml
