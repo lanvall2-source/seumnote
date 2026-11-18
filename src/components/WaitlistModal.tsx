@@ -24,12 +24,12 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
     setIsSubmitting(true);
 
-    const result = saveWaitlistSubmission({
+    const submissionData = {
       companyName,
       managerName,
       email,
@@ -37,16 +37,29 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       industry,
       teamSize,
       privacyAgreed,
-    });
+    };
 
-    setIsSubmitting(false);
+    const result = saveWaitlistSubmission(submissionData);
 
     if (!result.success) {
+      setIsSubmitting(false);
       setErrorMessage(result.error || "신청에 실패했습니다. 다시 확인해 주세요.");
       return;
     }
 
-    setIsSuccess(true);
+    // Vercel Serverless Function을 통한 Resend 자동 이메일 발송
+    try {
+      await fetch("/api/send-waitlist-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submissionData),
+      });
+    } catch (err) {
+      console.warn("이메일 발송 요청 중 오류(클라이언트 저장은 완료됨):", err);
+    } finally {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+    }
   };
 
   const handleResetAndClose = () => {
@@ -85,7 +98,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
               <strong className="text-slate-900">{companyName}</strong> ({managerName} 님), 반갑습니다. <br />
-              입력해주신 이메일(<span className="text-[#2563EB] font-bold">{email}</span>)로 서비스 계정 활성화 안내 및 데모 접속 링크가 발송될 예정입니다.
+              입력해주신 이메일(<span className="text-[#2563EB] font-bold">{email}</span>)로 접수 확인 및 계정 안내 메일이 발송되었습니다. 메일함을 확인해 주세요.
             </p>
 
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-500 text-left space-y-1.5">
