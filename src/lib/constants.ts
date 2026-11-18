@@ -149,6 +149,7 @@ export const DEMO_PROJECTS: ProjectDemoItem[] = [
   {
     id: "PRJ-2026-081",
     title: "서초구 방배동 근린생활시설 신축",
+    client: "정우개발(주) (대표 이정우)",
     department: "서초구청 건축과 (2차 보완 통보)",
     stage: "permit",
     stageLabel: "건축허가·심의",
@@ -192,6 +193,7 @@ export const DEMO_PROJECTS: ProjectDemoItem[] = [
   {
     id: "PRJ-2026-079",
     title: "성남시 판교 단독주택 착공신고 보완",
+    client: "건축주 김민수",
     department: "분당구청 건축허가팀 (1차 보완)",
     stage: "construction",
     stageLabel: "착공신고",
@@ -224,6 +226,7 @@ export const DEMO_PROJECTS: ProjectDemoItem[] = [
   {
     id: "PRJ-2026-072",
     title: "마포구 연남동 다가구주택 사용승인(준공)",
+    client: "건축주 박서연",
     department: "마포구청 주거환경과 (준공 현장조사)",
     stage: "completion",
     stageLabel: "사용승인(준공)",

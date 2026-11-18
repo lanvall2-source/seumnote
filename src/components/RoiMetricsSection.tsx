@@ -1,7 +1,18 @@
-import React from "react";
-import { Clock, ShieldCheck, FileCheck, TrendingDown, Users, Bell } from "lucide-react";
+import React, { useState } from "react";
+import { Clock, ShieldCheck, FileCheck, Calculator, ArrowRight, Sparkles } from "lucide-react";
 
-export function RoiMetricsSection() {
+interface RoiMetricsSectionProps {
+  onOpenWaitlist?: () => void;
+}
+
+export function RoiMetricsSection({ onOpenWaitlist }: RoiMetricsSectionProps) {
+  const [projectCount, setProjectCount] = useState<number>(4);
+  const [partnerCount, setPartnerCount] = useState<number>(4);
+
+  // 프로젝트당 협력사 조율 시간 절감 계산 (프로젝트당 약 4.5시간 소요 중 75%인 3.4시간 절감)
+  const savedHoursPerMonth = Math.round(projectCount * partnerCount * 0.9);
+  const savedCostPerYearManWon = Math.round((savedHoursPerMonth * 30000 * 12) / 10000);
+
   const metrics = [
     {
       icon: Clock,
@@ -42,6 +53,7 @@ export function RoiMetricsSection() {
           </p>
         </div>
 
+        {/* 3대 정량 지표 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {metrics.map((item, index) => {
             const Icon = item.icon;
@@ -72,6 +84,115 @@ export function RoiMetricsSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* 인터랙티브 ROI 계산기 위젯 */}
+        <div className="mt-12 bg-gradient-to-br from-slate-900 to-blue-950 rounded-2xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-400/30">
+                <Calculator className="w-3.5 h-3.5" />
+                <span>우리 사무소 맞춤 절감 효과 계산기</span>
+              </div>
+
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
+                  한 달에 인허가 프로젝트를 얼마나 진행하고 계신가요?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5">
+                  슬라이더를 조절하여 세움노트 도입 시 예상되는 시간과 비용 절감액을 확인해보세요.
+                </p>
+              </div>
+
+              {/* 슬라이더 컨트롤 */}
+              <div className="space-y-5 pt-2">
+                <div>
+                  <div className="flex justify-between text-xs sm:text-sm font-semibold mb-2">
+                    <span className="text-slate-300">월간 진행 프로젝트 수</span>
+                    <span className="text-blue-400 font-bold text-base">{projectCount}개 프로젝트</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="15"
+                    step="1"
+                    value={projectCount}
+                    onChange={(e) => setProjectCount(Number(e.target.value))}
+                    className="w-full accent-blue-500 bg-slate-800 h-2 rounded-lg cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
+                    <span>1개</span>
+                    <span>8개</span>
+                    <span>15개+</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs sm:text-sm font-semibold mb-2">
+                    <span className="text-slate-300">프로젝트당 협력업체 수 (구조, 토목, 설비, 소방 등)</span>
+                    <span className="text-blue-400 font-bold text-base">{partnerCount}개 업체</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="2"
+                    max="8"
+                    step="1"
+                    value={partnerCount}
+                    onChange={(e) => setPartnerCount(Number(e.target.value))}
+                    className="w-full accent-blue-500 bg-slate-800 h-2 rounded-lg cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
+                    <span>2개</span>
+                    <span>5개</span>
+                    <span>8개</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 계산 결과 카드 */}
+            <div className="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/15 space-y-5">
+              <div className="flex items-center gap-2 text-xs font-bold text-blue-300">
+                <Sparkles className="w-4 h-4" />
+                <span>예상 절감 시뮬레이션 결과</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-1">
+                <div className="bg-white/5 rounded-lg p-3.5 border border-white/10">
+                  <div className="text-[11px] text-slate-300">월간 절약 업무시간</div>
+                  <div className="text-2xl sm:text-3xl font-black text-white mt-1">
+                    약 {savedHoursPerMonth}시간
+                  </div>
+                  <div className="text-[10px] text-blue-300 mt-1">서류 취합·버전검토 시간</div>
+                </div>
+
+                <div className="bg-white/5 rounded-lg p-3.5 border border-white/10">
+                  <div className="text-[11px] text-slate-300">연간 기회비용 절감</div>
+                  <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">
+                    약 {savedCostPerYearManWon.toLocaleString()}만원
+                  </div>
+                  <div className="text-[10px] text-emerald-300 mt-1">인건비 및 공기지연 방지</div>
+                </div>
+              </div>
+
+              <div className="text-xs text-slate-300 leading-relaxed bg-black/20 p-3 rounded-lg border border-white/5">
+                💡 <span className="font-semibold text-white">세움노트 Pro 요금제(월 19,900원)</span> 기준,
+                투자 대비 <strong className="text-emerald-400">약 {Math.max(10, Math.round((savedCostPerYearManWon * 10000) / (19900 * 12)))}배 이상의 가치</strong>를 창출합니다.
+              </div>
+
+              {onOpenWaitlist && (
+                <button
+                  onClick={onOpenWaitlist}
+                  className="w-full py-3 px-4 rounded-xl font-bold bg-[#2563EB] hover:bg-blue-600 text-white text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg hover:shadow-blue-500/25"
+                >
+                  <span>14일 무료 체험으로 지금 절감하기</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>

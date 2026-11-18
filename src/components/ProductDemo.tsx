@@ -38,6 +38,117 @@ export function ProductDemo() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handlePrintPdf = () => {
+    const printWindow = window.open("", "_blank", "width=850,height=1100");
+    if (!printWindow) {
+      window.print();
+      return;
+    }
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="ko">
+      <head>
+        <meta charset="UTF-8">
+        <title>세움터 제출용 건축 인허가 보완요구사항 대비 조치내역서 - ${selectedProject.title}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+        <style>
+          body { font-family: Pretendard, sans-serif; padding: 40px; color: #111; line-height: 1.5; }
+          .header { text-align: center; border-bottom: 2px solid #111; padding-bottom: 16px; margin-bottom: 24px; }
+          .sub { font-size: 11px; color: #666; margin-bottom: 6px; }
+          h1 { font-size: 20px; font-weight: 800; margin: 0; letter-spacing: 1px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; }
+          th, td { border: 1px solid #bbb; padding: 10px 12px; }
+          th { background: #f4f4f4; font-weight: 700; }
+          .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+          .badge-blue { background: #ebf5ff; color: #1e40af; }
+          .badge-rose { background: #ffe4e6; color: #9f1239; }
+          .badge-emerald { background: #d1fae5; color: #065f46; }
+          .footer { margin-top: 40px; text-align: right; font-size: 12px; }
+          .stamp { display: inline-block; border: 2px solid #dc2626; color: #dc2626; padding: 6px 14px; border-radius: 6px; font-weight: bold; margin-top: 10px; }
+          @media print {
+            body { padding: 0; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="sub">[건축법 시행규칙 별지 서식 호환 / 세움터 건축행정시스템 제출용]</div>
+          <h1>건축 인허가 보완요구사항 대비 조치내역서</h1>
+        </div>
+
+        <table>
+          <tr>
+            <th style="width: 130px;">공사명 (대지위치)</th>
+            <td style="font-weight: bold;">${selectedProject.title}</td>
+          </tr>
+          <tr>
+            <th>허가관청 / 공문번호</th>
+            <td>${selectedProject.department} / 서초-건축-2026-8812호</td>
+          </tr>
+          <tr>
+            <th>건축주 / 설계자</th>
+            <td>${selectedProject.client} / (주)세움종합건축사사무소 (대표건축사)</td>
+          </tr>
+          <tr>
+            <th>보완 제출일</th>
+            <td>${new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+          </tr>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40px; text-align: center;">No</th>
+              <th style="width: 80px; text-align: center;">공종 구분</th>
+              <th>지자체 보완 요구 지시사항</th>
+              <th>조치 내용 및 첨부 도서명</th>
+              <th style="width: 80px; text-align: center;">조치 결과</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center; font-weight: bold;">1</td>
+              <td style="text-align: center;"><span class="badge badge-blue">구조</span></td>
+              <td>지하층 기초 지내력 검토서 및 구조안전확인서 제출 건</td>
+              <td>지내력 계산서(v2) 반영 완료 (도서 p.14~28 첨부 / 직인날인본)</td>
+              <td style="text-align: center; font-weight: bold; color: #16a34a;">조치완료</td>
+            </tr>
+            <tr>
+              <td style="text-align: center; font-weight: bold;">2</td>
+              <td style="text-align: center;"><span class="badge badge-rose">소방</span></td>
+              <td>옥상 피난계단 유효너비 1.2m 확보 여부 상세도</td>
+              <td>A-301 계단상세도 1,200mm 표기 수정 완료</td>
+              <td style="text-align: center; font-weight: bold; color: #16a34a;">조치완료</td>
+            </tr>
+            <tr>
+              <td style="text-align: center; font-weight: bold;">3</td>
+              <td style="text-align: center;"><span class="badge badge-emerald">에너지</span></td>
+              <td>건축물 에너지절약설계기준 부문별 배점표</td>
+              <td>EPI 82점 적합 계산서 및 단열재 성적서 반영</td>
+              <td style="text-align: center; font-weight: bold; color: #16a34a;">조치완료</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="footer">
+          <div>상기와 같이 인허가 보완요구사항에 대하여 조치내역서 및 관련 도서를 제출합니다.</div>
+          <div style="margin-top: 15px; font-weight: bold;">작성 시스템 : 세움노트 클라우드 공문 시스템 (발급 검증 완료)</div>
+          <div class="stamp">세움노트 검토승인필</div>
+        </div>
+
+        <script>
+          window.onload = function() {
+            setTimeout(function() {
+              window.print();
+            }, 300);
+          };
+        </script>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   const getDisciplineBadgeClass = (discipline: string) => {
     switch (discipline) {
       case "구조":
@@ -349,9 +460,13 @@ export function ProductDemo() {
                       세움터 건축행정시스템의 '보완요구사항 대비 조치내역서' 공문 규격으로 1초 만에 자동 생성됩니다.
                     </p>
                   </div>
-                  <button className="text-xs font-bold bg-[#2563EB] text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 hover:bg-blue-700 cursor-pointer shadow-xs">
+                  <button
+                    onClick={handlePrintPdf}
+                    className="text-xs font-bold bg-[#2563EB] text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 hover:bg-blue-700 cursor-pointer shadow-xs transition-all active:scale-95"
+                    title="클릭 시 세움터 양식 A4 공문 인쇄 및 PDF 저장이 실행됩니다"
+                  >
                     <Download className="w-3.5 h-3.5" />
-                    <span>세움터 제출용 PDF 출력</span>
+                    <span>세움터 제출용 PDF 출력 / 인쇄</span>
                   </button>
                 </div>
 

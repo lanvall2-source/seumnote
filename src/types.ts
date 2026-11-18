@@ -33,6 +33,7 @@ export interface SupplementCheckItem {
 export interface ProjectDemoItem {
   id: string;
   title: string;
+  client?: string; // 건축주
   department: string; // 예: 건축과, 소방서, 구조검토
   stage: "permit" | "construction" | "completion";
   stageLabel: string;

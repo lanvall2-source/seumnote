@@ -43,7 +43,7 @@ export function App() {
           onOpenWaitlist={handleOpenWaitlist}
           onScrollToDemo={handleScrollToDemo}
         />
-        <RoiMetricsSection />
+        <RoiMetricsSection onOpenWaitlist={handleOpenWaitlist} />
         <ProblemSection />
         <FeaturesSection />
         <HowItWorks onOpenWaitlist={handleOpenWaitlist} />
