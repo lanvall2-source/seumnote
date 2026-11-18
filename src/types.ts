@@ -18,12 +18,28 @@ export interface WaitlistSubmission {
   createdAt: string;
 }
 
+export type PermitStage = "all" | "permit" | "construction" | "completion";
+
+export interface SupplementCheckItem {
+  discipline: "건축" | "구조" | "토목" | "소방" | "에너지" | "설비";
+  title: string;
+  targetRole: string;
+  format: string;
+  status: "completed" | "reviewing" | "pending";
+  fileName?: string;
+  version?: string;
+}
+
 export interface ProjectDemoItem {
   id: string;
   title: string;
   department: string; // 예: 건축과, 소방서, 구조검토
+  stage: "permit" | "construction" | "completion";
+  stageLabel: string;
   dueDate: string;
+  dDay: string;
   status: "pending" | "submitted" | "in_review" | "approved";
   requestedFiles: string[];
+  checkItems: SupplementCheckItem[];
   submittedFilesCount: number;
 }

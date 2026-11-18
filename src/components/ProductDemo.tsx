@@ -12,13 +12,23 @@ import {
   Check,
   Building2,
   Layers,
+  MessageCircle,
+  BellRing,
+  FileCheck2,
 } from "lucide-react";
 import { DEMO_PROJECTS } from "@/lib/constants";
+import type { PermitStage } from "@/types";
 
 export function ProductDemo() {
   const [activeTab, setActiveTab] = useState<"projects" | "checklist" | "submit-link" | "pdf-result">("projects");
   const [selectedProjectId, setSelectedProjectId] = useState<string>("PRJ-2026-081");
+  const [stageFilter, setStageFilter] = useState<PermitStage>("all");
   const [copied, setCopied] = useState(false);
+
+  const filteredProjects = DEMO_PROJECTS.filter((p) => {
+    if (stageFilter === "all") return true;
+    return p.stage === stageFilter;
+  });
 
   const selectedProject = DEMO_PROJECTS.find((p) => p.id === selectedProjectId) || DEMO_PROJECTS[0];
 
@@ -26,6 +36,23 @@ export function ProductDemo() {
     navigator.clipboard.writeText(`https://seumnote.kr/submit/${selectedProject.id}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const getDisciplineBadgeClass = (discipline: string) => {
+    switch (discipline) {
+      case "구조":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "토목":
+        return "bg-amber-100 text-amber-800 border-amber-200";
+      case "소방":
+        return "bg-rose-100 text-rose-800 border-rose-200";
+      case "에너지":
+        return "bg-emerald-100 text-emerald-800 border-emerald-200";
+      case "설비":
+        return "bg-cyan-100 text-cyan-800 border-cyan-200";
+      default:
+        return "bg-purple-100 text-purple-800 border-purple-200";
+    }
   };
 
   return (
@@ -41,7 +68,7 @@ export function ProductDemo() {
             정돈된 직관적인 대시보드
           </h2>
           <p className="mt-4 text-base sm:text-lg text-slate-600 font-medium leading-relaxed">
-            아래 탭을 직접 클릭하여 프로젝트 관리, 실시간 보완 체크리스트, 협력사 제출 링크, 결과표 출력을 미리 체험해 보세요.
+            아래 탭을 직접 클릭하여 인허가 단계별 프로젝트 관리, 실시간 보완 체크리스트, 협력사 카톡 제출 링크, 세움터 결과표 출력을 미리 체험해 보세요.
           </p>
         </div>
 
@@ -99,22 +126,41 @@ export function ProductDemo() {
           </div>
 
           {/* 탭 내용 영역 */}
-          <div className="p-4 sm:p-8 min-h-[420px]">
+          <div className="p-4 sm:p-8 min-h-[460px]">
             {/* 탭 1: 프로젝트 현황 */}
             {activeTab === "projects" && (
-              <div className="space-y-4 animate-in fade-in duration-200">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="space-y-5 animate-in fade-in duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                   <div>
                     <h3 className="font-bold text-slate-900 text-base">진행 중인 인허가 프로젝트 목록</h3>
-                    <p className="text-xs text-slate-500">프로젝트를 클릭하면 해당 보완 세부사항으로 이동합니다.</p>
+                    <p className="text-xs text-slate-500">프로젝트를 클릭하면 해당 공문 보완 세부사항으로 이동합니다.</p>
                   </div>
-                  <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg">
-                    총 3건 관리 중
-                  </span>
+
+                  {/* 인허가 단계 필터 칩 */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                    {[
+                      { key: "all", label: "전체" },
+                      { key: "permit", label: "건축허가·심의" },
+                      { key: "construction", label: "착공신고" },
+                      { key: "completion", label: "사용승인" },
+                    ].map((st) => (
+                      <button
+                        key={st.key}
+                        onClick={() => setStageFilter(st.key as PermitStage)}
+                        className={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
+                          stageFilter === st.key
+                            ? "bg-[#2563EB] text-white"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {st.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {DEMO_PROJECTS.map((p) => {
+                  {filteredProjects.map((p) => {
                     const isSelected = p.id === selectedProjectId;
                     return (
                       <div
@@ -128,19 +174,9 @@ export function ProductDemo() {
                       >
                         <div className="flex items-center justify-between text-xs mb-2">
                           <span className="font-mono text-slate-400 font-bold">{p.id}</span>
-                          {p.status === "approved" ? (
-                            <span className="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-bold">
-                              완료 확인
-                            </span>
-                          ) : p.status === "in_review" ? (
-                            <span className="text-blue-700 bg-blue-100 px-2 py-0.5 rounded font-bold">
-                              검토 중
-                            </span>
-                          ) : (
-                            <span className="text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-bold">
-                              서류 요청 중
-                            </span>
-                          )}
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                            {p.stageLabel}
+                          </span>
                         </div>
 
                         <h4 className="font-bold text-slate-900 text-sm leading-snug line-clamp-1">
@@ -149,7 +185,10 @@ export function ProductDemo() {
                         <p className="text-xs text-slate-500 mt-1">{p.department}</p>
 
                         <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                          <span className="text-slate-400 font-medium">마감: {p.dueDate}</span>
+                          <span className="font-bold text-red-600 flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>{p.dDay}</span>
+                          </span>
                           <span className="font-bold text-blue-600">
                             서류 {p.submittedFilesCount}/{p.requestedFiles.length}건
                           </span>
@@ -164,43 +203,72 @@ export function ProductDemo() {
             {/* 탭 2: 보완 체크리스트 */}
             {activeTab === "checklist" && (
               <div className="space-y-4 animate-in fade-in duration-200">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base">
-                      [{selectedProject.title}] 보완 체크리스트
-                    </h3>
-                    <p className="text-xs text-slate-500">
-                      공문 요구사항별 담당자 지정 및 서류 수신 현황
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">
+                        {selectedProject.stageLabel}
+                      </span>
+                      <h3 className="font-bold text-slate-900 text-base">
+                        [{selectedProject.title}] 보완 요구사항
+                      </h3>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      {selectedProject.department} &middot; 공문 접수일 기준 보완 회신 기한 관리
                     </p>
                   </div>
-                  <span className="text-xs text-red-600 font-bold bg-red-50 px-2.5 py-1 rounded-lg border border-red-200">
-                    마감 기한: {selectedProject.dueDate}
+                  <span className="text-xs text-red-600 font-bold bg-red-50 px-2.5 py-1 rounded-lg border border-red-200 self-start sm:self-auto">
+                    마감 기한: {selectedProject.dueDate} ({selectedProject.dDay})
                   </span>
                 </div>
 
                 <div className="space-y-3">
-                  {selectedProject.requestedFiles.map((fileName, idx) => (
+                  {selectedProject.checkItems.map((item, idx) => (
                     <div
                       key={idx}
                       className="p-3.5 rounded-xl border border-slate-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300"
                     >
-                      <div className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0">
-                          {idx + 1}
+                      <div className="flex items-start gap-3">
+                        <span
+                          className={`text-[11px] font-bold px-2 py-1 rounded-lg border shrink-0 mt-0.5 ${getDisciplineBadgeClass(
+                            item.discipline
+                          )}`}
+                        >
+                          {item.discipline}
                         </span>
                         <div>
-                          <div className="text-sm font-bold text-slate-900">{fileName}</div>
-                          <div className="text-xs text-slate-400 mt-0.5">
-                            제출 대상: 구조설계팀 / 토목협력사 &middot; 포맷: PDF/DWG
+                          <div className="text-sm font-bold text-slate-900">{item.title}</div>
+                          <div className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-2">
+                            <span>담당 협력사: <strong className="text-slate-700">{item.targetRole}</strong></span>
+                            <span>&bull;</span>
+                            <span>요청 포맷: {item.format}</span>
+                            {item.fileName && (
+                              <>
+                                <span>&bull;</span>
+                                <span className="text-blue-600 font-medium">제출본: {item.fileName}</span>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 self-end sm:self-auto">
-                        <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          v2 최신본 보관됨
-                        </span>
-                        <button className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700">
+                      <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                        {item.status === "completed" ? (
+                          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                            <Check className="w-3.5 h-3.5" />
+                            <span>{item.version} 검토 승인</span>
+                          </span>
+                        ) : item.status === "reviewing" ? (
+                          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>새 도서 도착 (검토 대기)</span>
+                          </span>
+                        ) : (
+                          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+                            서류 제출 대기
+                          </span>
+                        )}
+                        <button className="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
                           상세보기
                         </button>
                       </div>
@@ -213,13 +281,24 @@ export function ProductDemo() {
             {/* 탭 3: 고객/협력사 서류 제출 링크 (비회원 뷰) */}
             {activeTab === "submit-link" && (
               <div className="max-w-xl mx-auto space-y-4 animate-in fade-in duration-200">
+                {/* 카카오톡 알림톡 자동 전송 안내 카드 */}
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#FEE500] flex items-center justify-center text-slate-900 shrink-0 shadow-xs">
+                    <MessageCircle className="w-4 h-4 fill-slate-900" />
+                  </div>
+                  <div className="text-xs text-amber-900">
+                    <strong className="block font-bold">카카오톡 알림톡 자동 발송 지원</strong>
+                    협력사 소장님·담당자 휴대폰으로 전용 링크가 알림톡으로 전송되며, 마감 D-3일과 D-1일에 자동 리마인드 알림이 전달됩니다.
+                  </div>
+                </div>
+
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between gap-3">
                   <div>
                     <span className="text-xs font-bold text-blue-900">
-                      외부 협력사/건축주 전송용 보안 링크
+                      협력사/건축주 전송용 모바일 원클릭 링크
                     </span>
                     <p className="text-xs text-blue-700 mt-0.5">
-                      회원가입 없이 스마트폰이나 PC에서 바로 서류를 제출합니다.
+                      별도 앱 설치나 회원가입 없이 스마트폰에서 바로 제출합니다.
                     </p>
                   </div>
                   <button
@@ -231,7 +310,7 @@ export function ProductDemo() {
                   </button>
                 </div>
 
-                {/* 실제 고객이 보게 되는 모바일 업로드 화면 목업 */}
+                {/* 실제 협력사가 보게 되는 모바일 업로드 화면 목업 */}
                 <div className="border-2 border-slate-200 rounded-2xl p-5 bg-white shadow-card space-y-4">
                   <div className="border-b border-slate-100 pb-3">
                     <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
@@ -251,7 +330,7 @@ export function ProductDemo() {
                       도면 또는 서류 파일(PDF, DWG, HWP)을 끌어다 놓으세요
                     </span>
                     <span className="text-[11px] text-slate-400 mt-1 block">
-                      최대 200MB까지 안전하게 업로드됩니다.
+                      최대 200MB까지 안전하게 업로드됩니다. (TLS 1.3 암호화)
                     </span>
                   </div>
                 </div>
@@ -267,32 +346,33 @@ export function ProductDemo() {
                       지자체(세움터) 제출용 인허가 보완 결과표
                     </h3>
                     <p className="text-xs text-slate-500">
-                      취합된 보완 항목과 첨부도서 목록이 공문 서식으로 자동 정렬됩니다.
+                      세움터 건축행정시스템의 '보완요구사항 대비 조치내역서' 공문 규격으로 1초 만에 자동 생성됩니다.
                     </p>
                   </div>
-                  <button className="text-xs font-bold bg-[#2563EB] text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 hover:bg-blue-700">
+                  <button className="text-xs font-bold bg-[#2563EB] text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 hover:bg-blue-700 cursor-pointer shadow-xs">
                     <Download className="w-3.5 h-3.5" />
-                    <span>PDF 다운로드</span>
+                    <span>세움터 제출용 PDF 출력</span>
                   </button>
                 </div>
 
                 {/* A4 공문 양식 목업 */}
-                <div className="bg-white border-2 border-slate-300 p-6 rounded-xl shadow-card text-xs space-y-3 font-sans">
-                  <div className="text-center pb-2 border-b-2 border-slate-900">
-                    <h4 className="text-base font-black text-slate-900 tracking-wider">
-                      건축허가 보완사항 조치 결과표
+                <div className="bg-white border-2 border-slate-300 p-6 sm:p-8 rounded-xl shadow-card text-xs space-y-4 font-sans">
+                  <div className="text-center pb-3 border-b-2 border-slate-900">
+                    <span className="text-[10px] text-slate-400 block mb-1">[건축법 시행규칙 별지 서식 호환]</span>
+                    <h4 className="text-base sm:text-lg font-black text-slate-900 tracking-wider">
+                      건축 인허가 보완요구사항 대비 조치내역서
                     </h4>
                   </div>
 
                   <table className="w-full border-collapse border border-slate-300 text-left">
                     <tbody>
                       <tr className="bg-slate-50">
-                        <th className="border border-slate-300 p-2 w-24 font-bold text-slate-700">공사명</th>
-                        <td className="border border-slate-300 p-2 text-slate-800">{selectedProject.title}</td>
+                        <th className="border border-slate-300 p-2 w-28 font-bold text-slate-700">공사명 (대지위치)</th>
+                        <td className="border border-slate-300 p-2 text-slate-800 font-semibold">{selectedProject.title}</td>
                       </tr>
                       <tr>
-                        <th className="border border-slate-300 p-2 font-bold text-slate-700">허가관청</th>
-                        <td className="border border-slate-300 p-2 text-slate-800">{selectedProject.department}</td>
+                        <th className="border border-slate-300 p-2 font-bold text-slate-700">허가관청 / 공문번호</th>
+                        <td className="border border-slate-300 p-2 text-slate-800">{selectedProject.department} / 서초-건축-2026-8812호</td>
                       </tr>
                     </tbody>
                   </table>
@@ -301,20 +381,29 @@ export function ProductDemo() {
                     <thead className="bg-slate-100 font-bold text-slate-700">
                       <tr>
                         <th className="border border-slate-300 p-2 w-10 text-center">No</th>
-                        <th className="border border-slate-300 p-2">지자체 보완 지시사항</th>
-                        <th className="border border-slate-300 p-2">조치 내용 및 첨부 도서</th>
+                        <th className="border border-slate-300 p-2 w-24">공종 구분</th>
+                        <th className="border border-slate-300 p-2">지자체 보완 요구 지시사항</th>
+                        <th className="border border-slate-300 p-2">조치 내용 및 첨부 도서명</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="border border-slate-300 p-2 text-center">1</td>
-                        <td className="border border-slate-300 p-2">지하층 기초 지내력 검토서 제출 건</td>
-                        <td className="border border-slate-300 p-2 text-slate-700">지내력 계산서(v2) 반영 완료 (도서 p.14~28 첨부)</td>
+                        <td className="border border-slate-300 p-2 text-center font-bold">1</td>
+                        <td className="border border-slate-300 p-2 font-semibold text-blue-800">구조</td>
+                        <td className="border border-slate-300 p-2">지하층 기초 지내력 검토서 및 구조안전확인서 제출 건</td>
+                        <td className="border border-slate-300 p-2 text-slate-700">지내력 계산서(v2) 반영 완료 (도서 p.14~28 첨부 / 직인날인본)</td>
                       </tr>
                       <tr>
-                        <td className="border border-slate-300 p-2 text-center">2</td>
-                        <td className="border border-slate-300 p-2">피난계단 유효너비 1.2m 확보 여부</td>
+                        <td className="border border-slate-300 p-2 text-center font-bold">2</td>
+                        <td className="border border-slate-300 p-2 font-semibold text-rose-800">소방</td>
+                        <td className="border border-slate-300 p-2">옥상 피난계단 유효너비 1.2m 확보 여부 상세도</td>
                         <td className="border border-slate-300 p-2 text-slate-700">A-301 계단상세도 1,200mm 표기 수정 완료</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-slate-300 p-2 text-center font-bold">3</td>
+                        <td className="border border-slate-300 p-2 font-semibold text-emerald-800">에너지</td>
+                        <td className="border border-slate-300 p-2">건축물 에너지절약설계기준 부문별 배점표</td>
+                        <td className="border border-slate-300 p-2 text-slate-700">EPI 82점 적합 계산서 및 단열재 성적서 반영</td>
                       </tr>
                     </tbody>
                   </table>

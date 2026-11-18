@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { RoiMetricsSection } from "@/components/RoiMetricsSection";
 import { ProblemSection } from "@/components/ProblemSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { HowItWorks } from "@/components/HowItWorks";
@@ -42,6 +43,7 @@ export function App() {
           onOpenWaitlist={handleOpenWaitlist}
           onScrollToDemo={handleScrollToDemo}
         />
+        <RoiMetricsSection />
         <ProblemSection />
         <FeaturesSection />
         <HowItWorks onOpenWaitlist={handleOpenWaitlist} />
