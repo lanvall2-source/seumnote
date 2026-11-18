@@ -15,27 +15,48 @@ import {
   MessageCircle,
   BellRing,
   FileCheck2,
+  ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import { DEMO_PROJECTS } from "@/lib/constants";
-import type { PermitStage } from "@/types";
+import { PartnerSubmitModal } from "@/components/PartnerSubmitModal";
+import type { PermitStage, ProjectDemoItem, SupplementCheckItem } from "@/types";
 
 export function ProductDemo() {
+  const [projects, setProjects] = useState<ProjectDemoItem[]>(DEMO_PROJECTS);
   const [activeTab, setActiveTab] = useState<"projects" | "checklist" | "submit-link" | "pdf-result">("projects");
   const [selectedProjectId, setSelectedProjectId] = useState<string>("PRJ-2026-081");
   const [stageFilter, setStageFilter] = useState<PermitStage>("all");
   const [copied, setCopied] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
-  const filteredProjects = DEMO_PROJECTS.filter((p) => {
+  const filteredProjects = projects.filter((p) => {
     if (stageFilter === "all") return true;
     return p.stage === stageFilter;
   });
 
-  const selectedProject = DEMO_PROJECTS.find((p) => p.id === selectedProjectId) || DEMO_PROJECTS[0];
+  const selectedProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`https://seumnote.kr/submit/${selectedProject.id}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSubmissionComplete = (updatedCheckItem: SupplementCheckItem) => {
+    setProjects((prev) =>
+      prev.map((proj) => {
+        if (proj.id !== selectedProjectId) return proj;
+        const newCheckItems = proj.checkItems.map((ci) =>
+          ci.title === updatedCheckItem.title ? updatedCheckItem : ci
+        );
+        return {
+          ...proj,
+          checkItems: newCheckItems,
+          status: "in_review",
+        };
+      })
+    );
   };
 
   const handlePrintPdf = () => {
@@ -403,7 +424,7 @@ export function ProductDemo() {
                   </div>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between gap-3">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <span className="text-xs font-bold text-blue-900">
                       협력사/건축주 전송용 모바일 원클릭 링크
@@ -412,31 +433,48 @@ export function ProductDemo() {
                       별도 앱 설치나 회원가입 없이 스마트폰에서 바로 제출합니다.
                     </p>
                   </div>
-                  <button
-                    onClick={handleCopyLink}
-                    className="text-xs font-bold bg-[#2563EB] hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 cursor-pointer shadow-xs"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copied ? "복사됨!" : "링크 복사"}</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleCopyLink}
+                      className="text-xs font-bold bg-white border border-blue-300 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 cursor-pointer shadow-2xs"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copied ? "복사완료!" : "링크 복사"}</span>
+                    </button>
+                    <button
+                      onClick={() => setIsSubmitModalOpen(true)}
+                      className="text-xs font-bold bg-[#2563EB] hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 cursor-pointer shadow-xs animate-pulse hover:animate-none"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>협력사 제출창 직접 체험</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* 실제 협력사가 보게 되는 모바일 업로드 화면 목업 */}
-                <div className="border-2 border-slate-200 rounded-2xl p-5 bg-white shadow-card space-y-4">
-                  <div className="border-b border-slate-100 pb-3">
-                    <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-                      (주)미래건축사사무소 서류 제출 요청
+                <div
+                  onClick={() => setIsSubmitModalOpen(true)}
+                  className="border-2 border-slate-200 hover:border-blue-400 rounded-2xl p-5 bg-white shadow-card space-y-4 cursor-pointer transition-all hover:shadow-lg group"
+                >
+                  <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                        (주)세움건축사사무소 서류 제출 요청
+                      </span>
+                      <h4 className="text-base font-bold text-slate-900 mt-1">
+                        {selectedProject.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        아래 필요한 인허가 보완 서류를 선택하여 올려주세요.
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold text-blue-600 bg-blue-50 group-hover:bg-blue-600 group-hover:text-white px-2.5 py-1.5 rounded-lg transition-colors hidden sm:inline-block">
+                      클릭하여 서류 제출 체험하기 &rarr;
                     </span>
-                    <h4 className="text-base font-bold text-slate-900 mt-1">
-                      {selectedProject.title}
-                    </h4>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      아래 필요한 인허가 보완 서류를 선택하여 올려주세요.
-                    </p>
                   </div>
 
-                  <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:bg-slate-50/50 transition-colors cursor-pointer">
-                    <Download className="w-8 h-8 text-blue-500 mx-auto mb-2 rotate-180" />
+                  <div className="border-2 border-dashed border-slate-300 group-hover:border-blue-400 rounded-xl p-6 text-center bg-slate-50/50 group-hover:bg-blue-50/30 transition-colors">
+                    <Download className="w-8 h-8 text-blue-500 mx-auto mb-2 rotate-180 group-hover:scale-110 transition-transform" />
                     <span className="text-xs font-bold text-slate-700 block">
                       도면 또는 서류 파일(PDF, DWG, HWP)을 끌어다 놓으세요
                     </span>
@@ -528,6 +566,14 @@ export function ProductDemo() {
           </div>
         </div>
       </div>
+
+      {/* 협력사용 원클릭 서류 제출 체험 모달 */}
+      <PartnerSubmitModal
+        isOpen={isSubmitModalOpen}
+        onClose={() => setIsSubmitModalOpen(false)}
+        project={selectedProject}
+        onSubmissionComplete={handleSubmissionComplete}
+      />
     </section>
   );
 }
