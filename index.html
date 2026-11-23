@@ -91,6 +91,19 @@
       ]
     }
     </script>
+    <script>
+      if (location.hostname === "seumnote.vercel.app") {
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        // Count visits without transmitting document links or query parameters.
+        window.va("beforeSend", function (event) {
+          return { ...event, url: location.origin + "/" };
+        });
+        const analytics = document.createElement("script");
+        analytics.src = "/_vercel/insights/script.js";
+        analytics.defer = true;
+        document.head.appendChild(analytics);
+      }
+    </script>
   </head>
   <body class="bg-[#F8FAFC] text-[#0F172A] antialiased font-sans selection:bg-blue-100 selection:text-blue-900 min-h-screen">
     <div id="root"></div>
