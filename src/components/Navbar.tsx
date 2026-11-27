@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { FileCheck2, Menu, X, ArrowRight, ShieldCheck } from "lucide-react";
+import { FileCheck2, Menu, X, ArrowRight, ShieldCheck, Share2, HelpCircle } from "lucide-react";
 
 interface NavbarProps {
   onOpenWaitlist: () => void;
   onOpenAdmin: () => void;
+  onOpenGuideModal?: () => void;
+  onOpenShareModal?: () => void;
 }
 
-export function Navbar({ onOpenWaitlist, onOpenAdmin }: NavbarProps) {
+export function Navbar({
+  onOpenWaitlist,
+  onOpenAdmin,
+  onOpenGuideModal,
+  onOpenShareModal,
+}: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -50,14 +57,36 @@ export function Navbar({ onOpenWaitlist, onOpenAdmin }: NavbarProps) {
         </nav>
 
         {/* 우측 액션 버튼 */}
-        <div className="hidden sm:flex items-center gap-3">
+        <div className="hidden sm:flex items-center gap-2 sm:gap-2.5">
+          {onOpenGuideModal && (
+            <button
+              onClick={onOpenGuideModal}
+              className="text-xs font-bold text-slate-600 hover:text-[#2563EB] px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors flex items-center gap-1 cursor-pointer"
+              title="인허가 보완 가이드 & FAQ 열기"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+              <span>가이드·FAQ</span>
+            </button>
+          )}
+
+          {onOpenShareModal && (
+            <button
+              onClick={onOpenShareModal}
+              className="text-xs font-bold text-slate-600 hover:text-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors flex items-center gap-1 cursor-pointer"
+              title="세움노트 동료에게 공유하기"
+            >
+              <Share2 className="w-3.5 h-3.5 text-slate-500" />
+              <span>공유</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenAdmin}
             className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1 cursor-pointer"
             title="신청자 관리자 열람"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-            <span>신청자 조회</span>
+            <span className="hidden lg:inline">신청자 조회</span>
           </button>
 
           <button
@@ -97,6 +126,30 @@ export function Navbar({ onOpenWaitlist, onOpenAdmin }: NavbarProps) {
             ))}
           </div>
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+            {onOpenGuideModal && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenGuideModal();
+                }}
+                className="w-full text-center py-2 text-xs font-bold text-blue-600 bg-blue-50 rounded-lg flex items-center justify-center gap-1.5"
+              >
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>인허가 보완 가이드 &amp; FAQ</span>
+              </button>
+            )}
+            {onOpenShareModal && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenShareModal();
+                }}
+                className="w-full text-center py-2 text-xs font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center gap-1.5"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>동료에게 세움노트 공유</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);

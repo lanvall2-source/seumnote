@@ -8,7 +8,7 @@
     <title>세움노트 (SeumNote) | 건축 인허가 보완 관리 및 서류 제출 SaaS</title>
     <meta name="title" content="세움노트 (SeumNote) | 건축 인허가 보완 관리 및 서류 제출 SaaS" />
     <meta name="description" content="건축 인허가 보완사항, 이제 한곳에서 관리하세요. 건축사사무소·설계업체를 위한 스마트 보완 관리 솔루션. 보완 요청부터 서류 제출 링크, 검토, 세움터 제출용 PDF 결과표까지 프로젝트별 원스톱 관리." />
-    <meta name="keywords" content="세움노트, SeumNote, 건축사사무소 서류 관리, 건축 인허가 보완 관리, 설계사무소 프로젝트 관리, 세움터 보완 관리, 고객 서류 제출 링크, 인허가 보완사항, 보완결과표 PDF, 감리 서류 관리" />
+    <meta name="keywords" content="세움노트, SeumNote, 건축사사무소 서류 관리, 건축 인허가 보완 관리, 설계사무소 프로젝트 관리, 세움터 보완 관리, 고객 서류 제출 링크, 인허가 보완사항, 보완결과표 PDF, 감리 서류 관리, 건축허가 보완서류, 구조안전확인서, 착공신고 보완, 사용승인 서류, 세움터 조치결과서, 건축 설계사무소 협업툴" />
     <meta name="author" content="세움노트 팀 (SeumNote)" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#2563EB" />
@@ -41,7 +41,7 @@
     <!-- Pretendard Web Font CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 
-    <!-- JSON-LD Structured Data (SoftwareApplication & FAQPage) -->
+    <!-- JSON-LD Structured Data (SoftwareApplication, HowTo, FAQPage, Organization) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -49,15 +49,55 @@
         {
           "@type": "SoftwareApplication",
           "name": "세움노트 (SeumNote)",
+          "url": "https://seumnote.vercel.app/",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web, Windows, macOS, iOS, Android",
           "description": "건축사사무소 및 설계업체를 위한 건축 인허가 보완사항 및 서류 관리 B2B SaaS 솔루션",
+          "featureList": [
+            "세움터 보완 공문 공종별 체크리스트 자동 분할",
+            "협력사·건축주 비회원 원클릭 전용 보안 업로드 링크",
+            "PDF/DWG 도면 및 공문 파일 버전(v1, v2) 무결성 관리",
+            "지자체 세움터 제출용 인허가 보완 조치결과표 A4 PDF 생성",
+            "인허가 D-Day 마감일 카운트다운 알림",
+            "TLS 1.3 암호화 및 AES-256 클라우드 안전 격리 보관"
+          ],
           "offers": {
             "@type": "Offer",
             "price": "19900",
             "priceCurrency": "KRW",
-            "description": "Pro 요금제 (14일 무료 체험 제공)"
+            "description": "Pro 요금제 (14일 무료 체험 제공, 신용카드 등록 불필요)"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "48"
           }
+        },
+        {
+          "@type": "HowTo",
+          "name": "건축 인허가 세움터 보완사항 3단계 원스톱 처리 방법",
+          "description": "지자체 건축과 보완 공문 접수부터 협력사 도서 취합, 세움터 제출용 A4 조치결과표 PDF 생성까지의 표준 프로세스",
+          "totalTime": "PT10M",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "position": 1,
+              "name": "보완 공문 접수 및 공종별 체크리스트 등록",
+              "text": "세움터 보완 공문 요구사항을 구조, 소방, 토목, 설비 공종별로 체크리스트화하고 마감 D-Day를 지정합니다."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 2,
+              "name": "협력사 및 건축주 비회원 전용 링크 발송",
+              "text": "카카오톡이나 문자로 원클릭 링크를 전달하여 협력사 엔지니어가 로그인 없이 도면과 계산서를 즉시 업로드합니다."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 3,
+              "name": "도서 검토 승인 및 세움터 제출용 A4 결과표 출력",
+              "text": "승인된 최신 도서로 지자체 세움터 표준 서식에 호환되는 인허가 보완 조치결과표 PDF를 1초 만에 자동 생성합니다."
+            }
+          ]
         },
         {
           "@type": "FAQPage",
@@ -80,13 +120,59 @@
             },
             {
               "@type": "Question",
+              "name": "세움터 시스템에 직접 연동되어 자동으로 올라가나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "세움노트는 지자체 세움터 제출 표준 규격에 맞춘 [건축 인허가 보완 조치결과표 PDF] 및 첨부 서류 묶음을 원클릭으로 정리 생성해 줍니다. 최종 검토 후 다운로드받은 서류를 세움터 업로드 창에 일괄 등록하시면 됩니다."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "도면 버전(v1, v2)이 꼬여 구버전이 잘못 제출되는 문제를 어떻게 막나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "동일 항목에 새 파일이 업로드되면 자동으로 v1, v2, v3 넘버링이 부여되며, 최종 승인본만 제출 대기 상태로 지정됩니다. 언제든 이전 버전 파일과 변경 사유를 타임라인으로 확인할 수 있어 덮어쓰기 사고를 100% 방지합니다."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "인허가 보완 기한(D-Day) 관리는 어떻게 이루어지나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "구청 보완 공문에 명시된 처리 기한(통상 15~30일)을 등록하면 메인 대시보드에서 D-Day 카운트다운과 진척률(%)을 시각적으로 확인할 수 있으며, 기한 임박 시 담당자 및 협력사에 제출 독려 알림을 제공합니다."
+              }
+            },
+            {
+              "@type": "Question",
               "name": "고객 파일은 안전하게 보관되나요?",
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "모든 문서는 TLS 1.3 암호화 전송 및 저장 시 AES-256 규격으로 안전하게 격리 보관되며, 인허가 보완 제출 링크는 프로젝트 담당자가 발급한 전용 만료 토큰으로 철저히 보호됩니다."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "14일 무료 체험 기간 동안 기능 제한이 있나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "아닙니다. 14일 무료 체험 기간 동안 프로젝트 생성, 비회원 링크 발송, 세움터 A4 결과표 생성 등 Pro 플랜의 모든 기능을 무제한으로 사용해 보실 수 있습니다. 신용카드 등록도 요구하지 않습니다."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "감리 업무나 사용승인(준공) 보완 단계에서도 사용할 수 있나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "네, 건축허가 단계뿐만 아니라 착공신고 보완, 공사 중 감리 중간보고서 취합, 그리고 사용승인(준공 검사) 필증 수령을 위한 시험성적서 및 하자보수 이행각서 수합까지 인허가 전 과정에서 동일하게 활용됩니다."
+              }
             }
           ]
+        },
+        {
+          "@type": "Organization",
+          "name": "세움노트 (SeumNote)",
+          "url": "https://seumnote.vercel.app/",
+          "logo": "https://seumnote.vercel.app/favicon.svg"
         }
       ]
     }

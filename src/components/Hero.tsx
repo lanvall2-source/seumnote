@@ -9,14 +9,23 @@ import {
   Shield,
   Layers,
   Sparkles,
+  BookOpen,
+  Share2,
 } from "lucide-react";
 
 interface HeroProps {
   onOpenWaitlist: () => void;
   onScrollToDemo: () => void;
+  onOpenGuideModal?: () => void;
+  onOpenShareModal?: () => void;
 }
 
-export function Hero({ onOpenWaitlist, onScrollToDemo }: HeroProps) {
+export function Hero({
+  onOpenWaitlist,
+  onScrollToDemo,
+  onOpenGuideModal,
+  onOpenShareModal,
+}: HeroProps) {
   return (
     <section className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
       {/* 배경 장식 은은한 그리드 패턴 */}
@@ -61,6 +70,16 @@ export function Hero({ onOpenWaitlist, onScrollToDemo }: HeroProps) {
               <Eye className="w-5 h-5 text-slate-500" />
               <span>사용 화면 보기</span>
             </button>
+
+            {onOpenGuideModal && (
+              <button
+                onClick={onOpenGuideModal}
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-blue-50/80 hover:bg-blue-100 text-[#2563EB] font-bold text-base border border-blue-200 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-subtle"
+              >
+                <BookOpen className="w-5 h-5 text-blue-600" />
+                <span>보완 가이드 &amp; FAQ</span>
+              </button>
+            )}
           </div>
 
           {/* 서브 안내 및 안심 요소 */}
@@ -79,6 +98,19 @@ export function Hero({ onOpenWaitlist, onScrollToDemo }: HeroProps) {
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               <span>고객·협력사 무가입 제출</span>
             </span>
+            {onOpenShareModal && (
+              <>
+                <span className="hidden sm:inline text-slate-300">&bull;</span>
+                <button
+                  type="button"
+                  onClick={onOpenShareModal}
+                  className="flex items-center gap-1.5 text-blue-600 hover:text-blue-800 font-bold underline cursor-pointer"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>동료 건축사에게 추천하기</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
 

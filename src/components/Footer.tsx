@@ -1,11 +1,17 @@
 import React from "react";
-import { FileCheck2, ShieldCheck, Mail, ArrowUp } from "lucide-react";
+import { FileCheck2, ShieldCheck, Mail, ArrowUp, Share2, HelpCircle } from "lucide-react";
 
 interface FooterProps {
   onOpenWaitlist: () => void;
+  onOpenGuideModal?: () => void;
+  onOpenShareModal?: () => void;
 }
 
-export function Footer({ onOpenWaitlist }: FooterProps) {
+export function Footer({
+  onOpenWaitlist,
+  onOpenGuideModal,
+  onOpenShareModal,
+}: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -55,6 +61,18 @@ export function Footer({ onOpenWaitlist }: FooterProps) {
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>TLS 1.3 암호화 & 데이터 안전 격리 보관</span>
             </div>
+            {onOpenShareModal && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={onOpenShareModal}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-blue-600" />
+                  <span>동료 건축사에게 세움노트 공유</span>
+                </button>
+              </div>
+            )}
           </div>
 
           <div>
@@ -67,6 +85,17 @@ export function Footer({ onOpenWaitlist }: FooterProps) {
               <li><a href="#demo" className="hover:text-blue-600">화면 예시</a></li>
               <li><a href="#pricing" className="hover:text-blue-600">요금제</a></li>
               <li><a href="#faq" className="hover:text-blue-600">자주 묻는 질문</a></li>
+              {onOpenGuideModal && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={onOpenGuideModal}
+                    className="text-blue-600 hover:underline font-bold text-left cursor-pointer"
+                  >
+                    가이드 &amp; 서류 규격표 모달
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

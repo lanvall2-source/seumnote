@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Clock, ShieldCheck, FileCheck, Calculator, ArrowRight, Sparkles } from "lucide-react";
+import { Clock, ShieldCheck, FileCheck, Calculator, ArrowRight, Sparkles, Lightbulb } from "lucide-react";
 
 interface RoiMetricsSectionProps {
   onOpenWaitlist?: () => void;
@@ -177,9 +177,12 @@ export function RoiMetricsSection({ onOpenWaitlist }: RoiMetricsSectionProps) {
                 </div>
               </div>
 
-              <div className="text-xs text-slate-300 leading-relaxed bg-black/20 p-3 rounded-lg border border-white/5">
-                💡 <span className="font-semibold text-white">세움노트 Pro 요금제(월 19,900원)</span> 기준,
-                투자 대비 <strong className="text-emerald-400">약 {Math.max(10, Math.round((savedCostPerYearManWon * 10000) / (19900 * 12)))}배 이상의 가치</strong>를 창출합니다.
+              <div className="text-xs text-slate-300 leading-relaxed bg-black/20 p-3 rounded-lg border border-white/5 flex items-start gap-2">
+                <Lightbulb className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-semibold text-white">세움노트 Pro 요금제(월 19,900원)</span> 기준,
+                  투자 대비 <strong className="text-emerald-400">약 {Math.max(10, Math.round((savedCostPerYearManWon * 10000) / (19900 * 12)))}배 이상의 가치</strong>를 창출합니다.
+                </div>
               </div>
 
               {onOpenWaitlist && (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck, HelpCircle, Megaphone } from "lucide-react";
 import { PRICING_PLAN } from "@/lib/constants";
 
 interface PricingSectionProps {
@@ -82,8 +82,9 @@ export function PricingSection({ onOpenWaitlist }: PricingSectionProps) {
 
             {/* 투명한 안내 고지 (요청사항 100% 준수: 결제 미구현 허위구매 방지) */}
             <div className="mt-5 p-3.5 rounded-xl bg-white border border-slate-200 text-center">
-              <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                📢 {PRICING_PLAN.notice}
+              <p className="text-xs text-slate-500 font-medium leading-relaxed inline-flex items-center justify-center gap-1.5 flex-wrap">
+                <Megaphone className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <span>{PRICING_PLAN.notice}</span>
               </p>
             </div>
           </div>
